@@ -12,7 +12,7 @@ describe Oystercard do
 
   describe ' #touch_in' do
     it 'in_journey becomes true when oystercard touched in' do
-      allow(oystercard).to receive(:balance).and_return 20
+      oystercard.top_up(20)
       oystercard.touch_in
       expect(oystercard.in_journey).to eq true
     end
@@ -24,6 +24,7 @@ describe Oystercard do
 
   describe ' #touch_out' do
     it 'in_journey becomes false when oystercard touched out' do
+      oystercard.top_up(20)
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard.in_journey).to eq false
@@ -34,7 +35,7 @@ describe Oystercard do
 
     it 'raises error if new balance exceeds limit' do
       subject.top_up(Oystercard::MAX_LIMIT)
-      expect{oystercard.top_up(1)}.to raise_error "You have exceeded the limit of #{Oystercard::LIMIT}"
+      expect{oystercard.top_up(1)}.to raise_error "You have exceeded the limit of #{Oystercard::MAX_LIMIT}"
     end
 
     it 'top up method sets new balance to 20' do
