@@ -10,4 +10,8 @@ class Oystercard
     raise "You have exceeded the limit of #{Oystercard::LIMIT}" if @balance + money > LIMIT
     @balance += money
   end
+
+  def deduct(ticket)
+    @balance -= ticket
+  end
 end
