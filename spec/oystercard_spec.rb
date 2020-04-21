@@ -34,7 +34,7 @@ describe Oystercard do
       oystercard.top_up(20)
       oystercard.touch_in
       expect {oystercard.touch_out}.to change{oystercard.balance}.by -1
-    end 
+    end
   end
 
   describe ' #top_up' do
@@ -55,15 +55,12 @@ describe Oystercard do
   end
 
   describe ' #deduct' do
-
-    it { is_expected.to respond_to(:deduct).with(1).argument }
-    it 'decrease balance' do
-      oystercard.top_up(15)
-      expect {oystercard.deduct 5 }.to change{oystercard.balance}.by -5
+    it 'oystercard recieves deduct method' do
+      oystercard.send(:deduct, 5)
     end
-
+    
+    it 'oystercard receives deduct method and deducts ticket' do
+      expect {oystercard.send(:deduct, 5) }.to change{oystercard.balance}.by -5
+    end
   end
-
-
-
 end

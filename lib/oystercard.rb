@@ -23,6 +23,7 @@ class Oystercard
     @in_journey = false
   end
 
+  private 
   def deduct(ticket)
     @balance -= ticket
   end
