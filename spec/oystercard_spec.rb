@@ -12,8 +12,13 @@ describe Oystercard do
 
   describe ' #touch_in' do
     it 'in_journey becomes true when oystercard touched in' do
+      allow(oystercard).to receive(:balance).and_return 20
       oystercard.touch_in
       expect(oystercard.in_journey).to eq true
+    end
+
+    it 'checks if a card with insufficient balance is touched in' do
+      expect{oystercard.touch_in}.to raise_error 'You have insufficient credit'
     end
   end
 
@@ -22,13 +27,13 @@ describe Oystercard do
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard.in_journey).to eq false
-    end 
+    end
   end
 
   describe ' #top_up' do
 
     it 'raises error if new balance exceeds limit' do
-      subject.top_up(Oystercard::LIMIT)
+      subject.top_up(Oystercard::MAX_LIMIT)
       expect{oystercard.top_up(1)}.to raise_error "You have exceeded the limit of #{Oystercard::LIMIT}"
     end
 
@@ -49,6 +54,7 @@ describe Oystercard do
       oystercard.top_up(15)
       expect {oystercard.deduct 5 }.to change{oystercard.balance}.by -5
     end
+
   end
 
 
