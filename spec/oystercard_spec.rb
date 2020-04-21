@@ -29,6 +29,12 @@ describe Oystercard do
       oystercard.touch_out
       expect(oystercard.in_journey).to eq false
     end
+
+    it 'balance decreases when oystercard touched out' do
+      oystercard.top_up(20)
+      oystercard.touch_in
+      expect {oystercard.touch_out}.to change{oystercard.balance}.by -1
+    end 
   end
 
   describe ' #top_up' do

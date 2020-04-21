@@ -1,5 +1,6 @@
 class Oystercard
   attr_reader :balance, :in_journey
+
   MAX_LIMIT = 90
   MIN_LIMIT = 1
   def initialize
@@ -12,16 +13,18 @@ class Oystercard
     @balance += money
   end
 
-  def deduct(ticket)
-    @balance -= ticket
-  end
-
   def touch_in
     raise 'You have insufficient credit' if @balance < MIN_LIMIT
     @in_journey = true
   end
 
   def touch_out
+    deduct(MIN_LIMIT)
     @in_journey = false
   end
+
+  def deduct(ticket)
+    @balance -= ticket
+  end
+
 end
