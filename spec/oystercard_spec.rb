@@ -14,7 +14,10 @@ describe Oystercard do
     expect {subject.top_up 20}.to change{subject.balance}.by 20
   end
 
-  it 'limit instance variable returns 90' do
-    expect(Oystercard::LIMIT).to eq 90
+  describe ':top_up' do
+    it 'raises error if new balance exceeds limit' do
+      subject.top_up(Oystercard::LIMIT)
+      expect{subject.top_up(1)}.to raise_error "You have exceeded the limit"
+    end
   end
 end
