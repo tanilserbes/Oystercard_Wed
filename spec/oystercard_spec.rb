@@ -6,6 +6,25 @@ describe Oystercard do
     expect(oystercard.balance).to eq 0
   end
 
+  it 'in_journey? returns false when initialized' do
+    expect(oystercard.in_journey).to eq false
+  end
+
+  describe ' #touch_in' do
+    it 'in_journey becomes true when oystercard touched in' do
+      oystercard.touch_in
+      expect(oystercard.in_journey).to eq true
+    end
+  end
+
+  describe ' #touch_out' do
+    it 'in_journey becomes false when oystercard touched out' do
+      oystercard.touch_in
+      oystercard.touch_out
+      expect(oystercard.in_journey).to eq false
+    end 
+  end
+
   describe ' #top_up' do
 
     it 'raises error if new balance exceeds limit' do
