@@ -2,6 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new}
+   let(:station) { double :station }
+
   it 'Balance method returns 0 when initialized' do
     expect(oystercard.balance).to eq 0
   end
@@ -12,29 +14,41 @@ describe Oystercard do
 
   describe ' #touch_in' do
     it 'in_journey becomes true when oystercard touched in' do
-      oystercard.top_up(20)
-      oystercard.touch_in
-      expect(oystercard.in_journey).to eq true
-    end
-
-    it 'checks if a card with insufficient balance is touched in' do
-      expect{oystercard.touch_in}.to raise_error 'You have insufficient credit'
+       oystercard.top_up(20)
+       oystercard.touch_in(station)
+       expect(oystercard.in_journey).to eq true
     end
   end
+
+    it 'checks if a card with insufficient balance is touched in' do
+      expect{oystercard.touch_in(station)}.to raise_error 'You have insufficient credit'
+    end
+
+    it 'remembers the entry station' do
+      oystercard.top_up(10)
+      expect(oystercard.touch_in(station)).to eq station
+    end
+
 
   describe ' #touch_out' do
     it 'in_journey becomes false when oystercard touched out' do
       oystercard.top_up(20)
-      oystercard.touch_in
+      oystercard.touch_in(station)
       oystercard.touch_out
       expect(oystercard.in_journey).to eq false
     end
 
     it 'balance decreases when oystercard touched out' do
       oystercard.top_up(20)
-      oystercard.touch_in
+      oystercard.touch_in(station)
       expect {oystercard.touch_out}.to change{oystercard.balance}.by -1
     end
+      it 'forgets the entry station when touching out' do
+        oystercard.top_up(20)
+        oystercard.touch_in(station)
+        oystercard.touch_out
+        expect(oystercard.station).to eq nil
+      end
   end
 
   describe ' #top_up' do
@@ -58,7 +72,7 @@ describe Oystercard do
     it 'oystercard recieves deduct method' do
       oystercard.send(:deduct, 5)
     end
-    
+
     it 'oystercard receives deduct method and deducts ticket' do
       expect {oystercard.send(:deduct, 5) }.to change{oystercard.balance}.by -5
     end
