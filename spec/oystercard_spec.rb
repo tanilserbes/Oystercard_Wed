@@ -1,35 +1,29 @@
 require 'oystercard'
+require 'journey'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new}
-   let(:entry_station) { double :entry_station }
-   let(:exit_station) { double :exit_station }
-   let (:journey) { {entry_station: entry_station, exit_station: exit_station}}
+
+   let(:entry_station) { double :station }
+   let(:exit_station) { double :station }
+   let (:journey) { { entry_station: entry_station, exit_station: exit_station}}
 
   it 'Balance method returns 0 when initialized' do
     expect(oystercard.balance).to eq 0
-  end
-
-  it 'in_journey? returns false when initialized' do
-    expect(oystercard.in_journey).to eq false
-  end
-
-  it "initialises journeys" do
-    expect(oystercard).to respond_to(:journeys)
   end
 
   it "can store journeys" do
     oystercard.top_up(20)
     oystercard.touch_in(entry_station)
     oystercard.touch_out(exit_station)
-    expect(oystercard.journeys).to include(:entry_station, :exit_station)
+    expect(oystercard.journey.journeys).to eq journey
   end
 
   describe ' #touch_in' do
     it 'in_journey becomes true when oystercard touched in' do
        oystercard.top_up(20)
        oystercard.touch_in(entry_station)
-       expect(oystercard.in_journey).to eq true
+       expect(oystercard.journey.status).to eq true
     end
   end
 
@@ -48,7 +42,7 @@ describe Oystercard do
       oystercard.top_up(20)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.in_journey).to eq false
+      expect(oystercard.journey.status).to eq false
     end
 
     it 'balance decreases when oystercard touched out' do
@@ -60,13 +54,25 @@ describe Oystercard do
         oystercard.top_up(20)
         oystercard.touch_in(entry_station)
         oystercard.touch_out(exit_station)
-        expect(oystercard.entry_station).to eq nil
+        expect(oystercard.journey.entry_station).to eq nil
       end
 
       it "remembers the exit station" do
         oystercard.top_up(20)
         oystercard.touch_in(entry_station)
         expect(oystercard.touch_out(exit_station)).to eq exit_station
+      end
+
+      it 'without touch_in, doing check_out' do
+        oystercard.touch_out(exit_station)
+        expect(oystercard.journey.entry_station).to eq nil
+      end
+
+      it 'shows the all journey' do
+        oystercard.top_up(20)
+        oystercard.touch_in(entry_station)
+        oystercard.touch_out(exit_station)
+        expect(oystercard.journey.journeys).to eq journey
       end
   end
 
