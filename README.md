@@ -1,4 +1,4 @@
-# Week two - Oystercard pairing project - Hibo Abdilaahi
+# Week two - Oystercard pairing project -  Tanıl Serbes
 
 ## Brief description of what the project is
 
@@ -73,13 +73,5 @@ To run tests, complete the following steps
 1. Open your terminal and make sure you are in the main oystercard folder.
 2. Type the command ‘rspec’ in the terminal to run all tests
 
-## How to contribute
-
-If you would like to contribute to this project, you can follow the instructions below
-
-1. Clone this repository to your local computer
-2. Create a new branch: $ git checkout https://github.com/hiboabd/oystercard -b name_for_new_branch.
-3. Make changes and test
-4. Submit Pull Request with comprehensive description of changes
 
 ## Acknowledgements
